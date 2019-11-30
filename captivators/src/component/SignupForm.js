@@ -3,7 +3,7 @@ import NavBar from './NavBar'
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper, Box, Container, TextField, Typography, Button } from '@material-ui/core'
 import { grey, green } from '@material-ui/core/colors'
-
+import API from '../API'
 const useStyles = makeStyles(theme => ({
   '@global': {
     body: {
@@ -57,6 +57,17 @@ export default function SignupForm() {
     occupation:'',
     confirmPassword: ''
   })
+
+  const handleSubmit = (event) =>{
+    event.preventDefault()
+    var data = state
+     API.post('auth/signup', data)
+     .then(response =>{
+      console.log('👉 Returned data:', response);
+      console.log(response.data.code)
+     })
+ 
+  }
   const handleChange = name => (event) => {
     console.log({ [name]: event.target.value })
     setState({ ...state, [name]: event.target.value });
@@ -86,9 +97,10 @@ export default function SignupForm() {
           </Box>
         </div>
         <Box display="flex" justifyContent="center" style={{ width: '100%', padding: '20px 0px 0px 0px' }}>
-        <form className={classes.container} >
+        <form className={classes.container} onSubmit={handleSubmit}>
           <div>
           <TextField
+              reuired
               id="name"
               label="Name"
               className={classes.textField}
@@ -98,6 +110,7 @@ export default function SignupForm() {
               onChange={handleChange('name')}
             />
             <TextField
+            required
               error={error.email}
               id="email"
               label="Email"
@@ -109,31 +122,10 @@ export default function SignupForm() {
               onChange={handleChange('email')}
             />
           </div>
+  
           <div>
           <TextField
-              error={error.number}
-              id="phoneNumber"
-              label="Phone Number"
-              helperText={error.message}
-              className={classes.textField}
-              margin="dense"
-              variant="outlined"
-              value={state.number}
-              onChange={handleChange('number')}
-            />
-            <TextField
-              id="occupation"
-              label="Occupation"
-              helperText={error.message}
-              className={classes.textField}
-              margin="dense"
-              variant="outlined"
-              value={state.occupation}
-              onChange={handleChange('occupation')}
-            />
-          </div>
-          <div>
-          <TextField
+          required
               error={error.password}
               id="password"
               label="Password"
@@ -146,6 +138,7 @@ export default function SignupForm() {
               onChange={handleChange('password')}
             />
             <TextField
+            required
               error={error.confirmPassword}
               type="password"
               id="confirmPassword"
@@ -160,7 +153,7 @@ export default function SignupForm() {
           </div>
           <div>
           <Box display="flex" justifyContent="center" style={{ width: '100%', padding: '20px 0px 0px 0px' }}>
-            <Button variant="contained" className={classes.button}>
+            <Button type="submit" variant="contained" className={classes.button}>
               Sign up
             </Button>
             </Box>

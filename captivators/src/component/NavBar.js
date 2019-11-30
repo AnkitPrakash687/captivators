@@ -47,9 +47,9 @@ const useStyles = makeStyles(theme => ({
          
             {
             props.isLoggedIn ?
-            <Button className={classes.button}>Login</Button>
-            :
             <Button className={classes.button}>Logout</Button>
+            :
+            <Button className={classes.button}>Login</Button>
             }
             
              </Grid>

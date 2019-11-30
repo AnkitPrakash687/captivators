@@ -4,12 +4,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import SignupForm from './SignupForm';
 import LoginForm from './LoginForm'
 import { Paper, Box, Container, TextField, Typography, Button,
-    Snackbar, IconButton } from '@material-ui/core'
+    Snackbar, IconButton, Grid } from '@material-ui/core'
 import { grey, green } from '@material-ui/core/colors'
 import Footer from './Footer';
 import Appointment from './client/Appointment'
 import Profile from './../images/profile.png'
 import CloseIcon from '@material-ui/icons/Close';
+import FindAdvisor from './client/FindAdvisor';
 
 const useStyles = makeStyles(theme => ({
     '@global': {
@@ -20,7 +21,6 @@ const useStyles = makeStyles(theme => ({
     root: {
         
         margin: theme.spacing(5),
-        maxWidth: 700
     },
     paper: {
          background: grey[100],
@@ -41,8 +41,10 @@ export default function ClientDashboard() {
     var isLoggedIn = sessionStorage.getItem('isLoggedIn')
     return (
         <div>
-            <NavBar isLoggedIn={isLoggedIn} />
+            <NavBar isLoggedIn={isLoggedIn} /> 
             <Container component="main" className={classes.root}>
+                <Grid container >
+                    <Grid item xs={12} sm={8}>
                 <Paper elevation={5} className={classes.paper}>
                     <div>
                         <Paper className={classes.heading}>
@@ -60,7 +62,11 @@ export default function ClientDashboard() {
                        <Appointment profile={Profile}></Appointment>
                     </Box>
                 </Paper>
-
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                <FindAdvisor></FindAdvisor>
+                </Grid>
+                </Grid>
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'bottom',

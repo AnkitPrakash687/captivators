@@ -87,7 +87,7 @@ export default function ClientRequest(props){
         <Box display="flex" flexDirection="column" >
             <Button variant="contained" color="primary" className={classes.button}>View Message</Button>
             <Button variant="contained" color="primary" className={classes.button}>Download Documents</Button>
-            <Button variant="contained" color="secondary" className={classes.button}>Send Message</Button>
+            <Button variant="contained" color="primary" className={classes.button}>Send Message</Button>
           </Box>
         </Box>
     )

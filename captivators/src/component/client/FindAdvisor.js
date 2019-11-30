@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import NavBar from './NavBar'
+import NavBar from './../NavBar'
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper, Box, Container, TextField, Typography, Button,
 Snackbar, IconButton } from '@material-ui/core'
@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
   },
 
   textField: {
-    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(1),
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2)
   },
@@ -46,7 +46,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function LoginForm() {
+export default function FindAdvisor() {
   const classes = useStyles()
 
   const [error, setError] = useState({
@@ -58,17 +58,8 @@ export default function LoginForm() {
   })
 
   const [state, setState] = useState({
-    name: '',
-    email: '',
-    number: '',
-    password: '',
-    occupation:'',
-    confirmPassword: ''
-  })
-
-  const [login, setLogin] = useState({
-      isLoggedIn: false,
-      role: 0
+    searchByLocation: '',
+    searchByName: '',
   })
 
   const [snack, setSnack] = useState({
@@ -85,49 +76,10 @@ export default function LoginForm() {
   }
 
   const handleSubmit = () =>{
-      if(state.email == 'client' && state.password == '1234'){
-            setLogin({
-                isLoggedIn: true,
-                role: 1
-            })
-      }else if(state.email == 'advisor' && state.password == '1234'){
-        setLogin({
-            isLoggedIn: true,
-            role: 2
-        })
-      }else if(state.email == 'admin' && state.password == '1234'){
-        setLogin({
-            isLoggedIn: true,
-            role: 3
-        })
-      }else{
-            setSnack({
-                open: true,
-                message: 'Invalid Id or Password!'
-            })
-      }
-
-      
+   
   }
 
-  if(login.isLoggedIn){
-      sessionStorage.setItem('isLoggedIn', true)
-        if(login.role == 1){
-            return(
-            <Redirect to="/client">
 
-            </Redirect>
-            )
-        }else if(login.role == 2){
-            return(
-            <Redirect to="/advisor"></Redirect>
-            )
-        }else{
-            return(
-            <Redirect to="/admin"></Redirect>
-            )
-        }
-  }
   return (
     <Container component="main" className={classes.root}>
       <Paper elevation={5} className={classes.paper}>
@@ -136,7 +88,7 @@ export default function LoginForm() {
           <Box display="flex" justifyContent="center" style={{ width: '100%' }}>
             <Typography component="div">
               <Box color={grey[800]} fontWeight="bold" fontSize="h4.fontSize">
-                LOGIN
+                Find an Advisor
               </Box>
             </Typography>
           </Box>
@@ -146,31 +98,34 @@ export default function LoginForm() {
         <form className={classes.container} onSubmit={handleSubmit}>
           <div>
             <TextField
-              required  
-              error={error.email}
-              id="email"
-              label="Email"
-              helperText={error.message}
+              required
+              id="searchByLocation"
+              label="Zip code, city or name"
               className={classes.textField}
               margin="dense"
               variant="outlined"
-              value={state.email}
-              onChange={handleChange('email')}
+              value={state.searchByLocation}
+              onChange={handleChange('searchByLocation')}
             />
           </div>
+          <Box display="flex" justifyContent="center" style={{ width: '100%' }}>
+          <Typography component="div">
+              <Box color={grey[800]} fontWeight="bold" fontSize="h8.fontSize">
+                OR
+              </Box>
+            </Typography>
+          </Box>
           <div>
           <TextField
-              error={error.password}
-              required
-              id="password"
-              label="Password"
+              id="searchByName"
+              label="Name"
               helperText={error.message}
               className={classes.textField}
               margin="dense"
               variant="outlined"
-              value={state.password}
+              value={state.searchByName}
               type="password"
-              onChange={handleChange('password')}
+              onChange={handleChange('searchByName')}
             />
           </div>
         
@@ -182,7 +137,7 @@ export default function LoginForm() {
             type="submit"
             >
             
-              Login
+              Search
             </Button>
             </Box>
           </div>
