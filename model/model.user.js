@@ -3,7 +3,7 @@
 var mongoose = require('mongoose');
 var validator = require('validator');
 
-var UserModel = mongoose.model('UserModel', {
+var UserModel = mongoose.model('UxdUserModel', {
     email_id: {
         type: String,
         required: true,

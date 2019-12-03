@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
-import NavBar from './NavBar'
+import NavBar from '../NavBar'
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper, Box, Container, TextField, Typography, Button } from '@material-ui/core'
 import { grey, green } from '@material-ui/core/colors'
-import API from '../API'
+import API from '../../API'
+import Cards from 'react-credit-cards';
+import CreditCardInput from 'react-credit-card-input';
+
 const useStyles = makeStyles(theme => ({
   '@global': {
     body: {
@@ -11,9 +14,7 @@ const useStyles = makeStyles(theme => ({
     },
   },
   root: {
-    marginTop: theme.spacing(5),
-    maxWidth: 700,
-    marginBottom: theme.spacing(5)
+  
 
   },
   paper: {
@@ -38,7 +39,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function SignupForm() {
+export default function Payment() {
   const classes = useStyles()
 
   const [error, setError] = useState({
@@ -52,9 +53,11 @@ export default function SignupForm() {
   const [state, setState] = useState({
     name: '',
     email: '',
+    cvc: '',
+    expiry: '',
+    focus: '',
+    name: '',
     number: '',
-    password: '',
-    confirmPassword: ''
   })
 
   const handleSubmit = (event) =>{
@@ -75,27 +78,49 @@ export default function SignupForm() {
     // }
 
   }
+
+  const handleInputFocus = (e) => {
+    setState({ focus: e.target.name });
+  }
+  
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    
+    setState({ [name]: value });
+  }
   return (
     <Container component="main" className={classes.root}>
-      <Paper elevation={5} className={classes.paper}>
+    
         <div>
           <Box display="flex" justifyContent="center" style={{ width: '100%', padding: '50px 0px 0px 0px' }}>
             <Typography component="div">
               <Box color={grey[700]} fontWeight="bold" fontSize="h4.fontSize">
-                Don't have an account? <br />
+                Payment <br />
               </Box>
+            </Typography>
+          </Box>
 
-            </Typography>
-          </Box>
-          <Box display="flex" justifyContent="center" style={{ width: '100%' }}>
-            <Typography component="div">
-              <Box color={grey[700]} fontWeight="bold" fontSize="h6.fontSize">
-                Get Started
-              </Box>
-            </Typography>
-          </Box>
         </div>
+
+        <div id="PaymentForm">
+        <Cards
+          cvc={state.cvc}
+          expiry={state.expiry}
+          focused={state.focus}
+          name={state.name}
+          number={state.number}
+        />
+     
+      </div>
         <Box display="flex" justifyContent="center" style={{ width: '100%', padding: '20px 0px 0px 0px' }}>
+            <div>
+                  <CreditCardInput
+                      cardNumberInputProps={{ value: state.number, onChange: handleInputChange }}
+                      cardExpiryInputProps={{ value: state.expiry, onChange: handleInputChange }}
+                      cardCVCInputProps={{ value: state.cvc, onChange: handleInputChange }}
+                      fieldClassName="input"
+                  />
+              </div>
         <form className={classes.container} onSubmit={handleSubmit}>
           <div>
           <TextField
@@ -159,7 +184,7 @@ export default function SignupForm() {
           </div>
         </form>
         </Box>
-      </Paper>
+   
     </Container>
   )
 }

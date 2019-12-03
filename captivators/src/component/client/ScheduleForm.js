@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import NavBar from './../NavBar'
+import NavBar from '../NavBar'
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Paper, Box, Container, TextField, Typography, Button,
@@ -8,7 +8,8 @@ import {
 import { grey, green } from '@material-ui/core/colors'
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom"
 import CloseIcon from '@material-ui/icons/Close';
-
+import { DatePicker, MuiPickersUtilsProvider, TimePicker}  from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 const useStyles = makeStyles(theme => ({
   '@global': {
     body: {
@@ -16,8 +17,8 @@ const useStyles = makeStyles(theme => ({
     },
   },
   root: {
-    marginTop: theme.spacing(5),
-    maxWidth: 350
+    
+
 
   },
   paper: {
@@ -43,12 +44,22 @@ const useStyles = makeStyles(theme => ({
     borderBottomRightRadius: 0,
     padding: theme.spacing(2),
     marginBottom: theme.spacing(2)
+  }, 
+  messageBox:{
+    margin: theme.spacing(2)
+  
+  },
+  input:{
+    display: 'none'
+  },
+  upload:{
+    margin: theme.spacing(2)
   }
 
 }));
 
 
-export default function FindAdvisor() {
+export default function ScheduleForm() {
   const classes = useStyles()
 
   const [error, setError] = useState({
@@ -60,8 +71,8 @@ export default function FindAdvisor() {
   })
 
   const [state, setState] = useState({
-    searchByLocation: '',
-    searchByName: '',
+    date: new Date(),
+    time: new Date(),
   })
 
   const [snack, setSnack] = useState({
@@ -79,6 +90,14 @@ export default function FindAdvisor() {
     // }
 
   }
+
+  const handleDateChange = name => (date) => {
+
+    setState({ ...state, [name]: date });
+}
+
+const [files, setFiles] = useState([])
+
 useEffect(()=>{
   setRedirect(false)
 })
@@ -99,6 +118,18 @@ useEffect(()=>{
         }
   }
 
+  const handleFileChange = (event) => {
+    //console.log(event.target.files[0])
+    var targetFiles = event.target.files
+    var fileArray = []
+    for( var x=0; x<targetFiles.length; x++){
+      console.log(targetFiles[x])
+      fileArray.push(targetFiles[x])
+    }
+    setFiles(fileArray)
+    console.log(fileArray)
+
+  }
 if(redirect){
   if(state.searchByName != ''){
  
@@ -122,8 +153,8 @@ if(redirect){
           <Paper className={classes.heading}>
             <Box display="flex" justifyContent="center" style={{ width: '100%' }}>
               <Typography component="div">
-                <Box color={grey[800]} fontWeight="bold" fontSize="h4.fontSize">
-                  Find an Advisor
+                <Box color={grey[800]} fontWeight="bold" fontSize="h6.fontSize">
+                  Schedule an Appointment
               </Box>
               </Typography>
             </Box>
@@ -132,33 +163,82 @@ if(redirect){
         <Box display="flex" justifyContent="center" style={{ width: '100%' }}>
           <form className={classes.container} onSubmit={handleSubmit}>
             <div>
-              <TextField
-                id="searchByLocation"
-                label="Zip code, City or State"
-                className={classes.textField}
-                margin="dense"
-                variant="outlined"
-                value={state.searchByLocation}
-                onChange={handleChange('searchByLocation')}
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <DatePicker
+                variant="normal"
+                style={{
+                  margin: '20px'
+                }}
+               format="MM/dd/yyy"
+                margin="normal"
+                id="date"
+                label="Date"
+                value={state.date}
+                onChange={handleDateChange('date')}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
               />
+              <TimePicker
+                variant="normal"
+                style={{
+                  margin: '20px'
+                }}
+                margin="normal"
+                id="time"
+                label="Time"
+                value={state.date}
+                onChange={handleDateChange('date')}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+              />
+
+
+              </MuiPickersUtilsProvider>
             </div>
-            <Box display="flex" justifyContent="center" style={{ width: '100%' }}>
-              <Typography component="div">
-                <Box color={grey[800]} fontWeight="bold" fontSize="h8.fontSize">
-                  OR
-              </Box>
-              </Typography>
-            </Box>
+            <div>
+              <input
+                accept="image/*"
+                className={classes.input}
+                id="contained-button-file"
+                multiple
+                type="file"
+                onChange={handleFileChange}
+                onClick={(event) => event.target.value = ''}
+              />
+              <label htmlFor="contained-button-file">
+                <Button className={classes.upload} variant="contained" color="primary" component="span">
+                  Upload Documents
+                </Button>
+              </label>
+              <ol>
+              {
+                files.map((file)=>{
+                  return (
+                    <li>
+                    <Typography component="div">
+                    <Box style={{margin: '0px 0px 0px 20px'}}color={grey[800]} fontWeight="bold" fontSize="h8.fontSize">
+                      {file.name} ({file.size/1000 + ' kb'})
+                  </Box>
+                  </Typography>
+                  </li>
+                  )
+                })
+              }
+              </ol>
+            </div>
             <div>
               <TextField
-                id="searchByName"
-                label="Name"
-                helperText={error.message}
-                className={classes.textField}
-                margin="dense"
+                className={classes.messageBox}
+                multiline
+                rows={5}
+                id="message"
+                label="Message"
+                fullWidth
                 variant="outlined"
-                value={state.searchByName}
-                type="password"
+                value={state.message}
+                type="text"
                 onChange={handleChange('searchByName')}
               />
             </div>
@@ -171,7 +251,7 @@ if(redirect){
                   type="submit"
                 >
 
-                  Search
+                  Schedule Appointment
             </Button>
               </Box>
             </div>

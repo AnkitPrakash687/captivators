@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper, Box, Container, TextField, Typography, Button,
-Snackbar, IconButton, Divider, Dialog } from '@material-ui/core'
+Snackbar, IconButton, Divider } from '@material-ui/core'
 import { grey, green } from '@material-ui/core/colors'
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom"
 import CloseIcon from '@material-ui/icons/Close';
-import NavBar from './../NavBar'
-import Payment from './Payment'
+import NavBar from '../NavBar'
+
 
 const useStyles = makeStyles(theme => ({
     '@global': {
@@ -29,22 +29,27 @@ const useStyles = makeStyles(theme => ({
     button:{
       margin: theme.spacing(2,0,0,6),
       textTransform: 'none'
-    }
+    },
+    messageBox:{
+      margin: theme.spacing(2,0,2,0),
+      backgroundColor: theme.palette.common.white,
+      display: 'flex',
+      flexDirection: 'row',
+      borderStyle: 'solid',
+      border: '1px',
+      
+    },
+  message:{
+      minHeight: 150,
+      minWidth: 200
+  }
    
     
   }));
 
   
-export default function Appointment(props){
+export default function Advisor(props){
     const classes = useStyles()
-    const [open, setOpen] = useState(false)
-    const handlePayment = () =>{
-        setOpen(true)
-    }
-
-    const handleClose = () =>{
-      setOpen(false)
-    }
     return(
         <Box className={classes.root}>
             <img 
@@ -72,36 +77,17 @@ export default function Appointment(props){
           Maryville, MO
           </Typography>
           </div><br/>
-          <div>
-          <Typography variant="body">
-          Date: 11/17/2019
-          </Typography>
-          </div>
         </Box>
-        
-        <Box display="flex" flexDirection="column" >
-            <Button variant="contained" color="primary" className={classes.button}>Upload Documents</Button>
-            {props.paid?
-            <Button variant="contained" color="primary" className={classes.button}>Payment Details</Button>:
-            <Button 
-            variant="contained" 
-            color="primary" 
-            className={classes.button}
-            onClick={handlePayment}
-            >Pay</Button>
-            }
-            <Button variant="contained" color="secondary" className={classes.button}>Cancel Appointment</Button>
+        <Box className={classes.messageBox} display="flex" flexDirection="column" >
+            <Paper className={classes.message}>
+              Bio
+            </Paper>
           </Box>
+        <Box display="flex" flexDirection="column" >
+            <Button variant="contained" color="primary" className={classes.button}>Select</Button>
+            <Button variant="contained" color="primary" className={classes.button}>Contact</Button>
 
-        <Dialog disableBackdropClick={true}
-          onClose={handleClose}
-          aria-labelledby="simple-dialog-title"
-          open={open}>
-          <div>
-
-            <Payment onClose={handleClose}></Payment>
-          </div>
-        </Dialog>
+          </Box>
         </Box>
     )
 }

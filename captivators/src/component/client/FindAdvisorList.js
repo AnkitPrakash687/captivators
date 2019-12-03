@@ -1,16 +1,14 @@
 import React, { useState } from 'react'
-import NavBar from './NavBar'
+import NavBar from '../NavBar'
 import { makeStyles } from '@material-ui/core/styles';
-import SignupForm from './SignupForm';
-import LoginForm from './LoginForm'
 import { Paper, Box, Container, TextField, Typography, Button,
     Snackbar, IconButton, Grid } from '@material-ui/core'
 import { grey, green } from '@material-ui/core/colors'
-import Footer from './Footer';
-import Appointment from './client/Appointment'
-import Profile from './../images/profile.png'
+import Footer from '../Footer';
+import Advisor from './Advisor'
+import Profile from '../../images/profile.png'
 import CloseIcon from '@material-ui/icons/Close';
-import FindAdvisor from './client/FindAdvisor';
+import FindAdvisor from '../client/FindAdvisor';
 
 const useStyles = makeStyles(theme => ({
     '@global': {
@@ -32,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function ClientDashboard() {
+export default function FindAdvisorList() {
     const classes = useStyles()
     const [snack, setSnack] = useState({
         open: false,
@@ -48,18 +46,25 @@ export default function ClientDashboard() {
                 <Paper elevation={5} className={classes.paper}>
                     <div>
                         <Paper className={classes.heading}>
-                            <Box display="flex" justifyContent="center" style={{ width: '100%' }}>
+                            <Box display="flex" justifyContent="left" style={{ width: '100%' }}>
                                 <Typography component="div">
                                     <Box color={grey[800]} fontWeight="bold" fontSize="h4.fontSize">
-                                        Your Appointments
-              </Box>
+                                        Find a Financial Advisor
+                                    </Box>
+                                </Typography>
+                            </Box>
+                            <Box display="flex" justifyContent="left" style={{ width: '100%' }}>
+                                <Typography component="div">
+                                    <Box color={grey[800]}  fontSize="h8.fontSize">
+                                        {'We found 2 advisors'}
+                                    </Box>
                                 </Typography>
                             </Box>
                         </Paper>
                     </div>
                     <Box display="flex" flexDirection="column"justifyContent="center" style={{ width: '100%' }}>
-                       <Appointment profile={Profile} paid={false}></Appointment>
-                       <Appointment profile={Profile} paid={true}></Appointment>
+                       <Advisor profile={Profile}/>
+                       <Advisor profile={Profile}/>
                     </Box>
                 </Paper>
                 </Grid>

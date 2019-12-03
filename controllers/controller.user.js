@@ -50,49 +50,6 @@ var signUp = (req,res) => {
             userModel.save().then((user) => {
                 if(user){
 
-                    readHTMLFile(__dirname + '/resetPassword.html', function(err, html) {
-
-                        console.log( __dirname+'/images/forget_password.png')
-                        var template = handlebars.compile(html);
-                        var replacements = {
-                            username: user.first_name + ' ' + user.last_name,
-                            image1: 'https://i.ibb.co/HF4ZQBF/codeword-favi.png',
-                            url:'https://codeword-group03.herokuapp.com/verifyEmail/'+token,
-                            type: 'Verify Email',
-                            message1: 'There\'s just one more step before you get to the fun part.',
-                            message2: 'Please verify that we have the right email address by clicking on the link below:'
-                       };
-                    const transporter = nodemailer.createTransport({
-                        service: 'gmail', 
-                        auth: {
-                                user: 'codeword.group03@gmail.com',
-                                pass: 'Aug@2019'
-                             }
-                    });
-
-                const mailoptions = {
-                    from: 'codeword.group03@gmail.com', 
-                    to: body.email, 
-                    subject: "Codeword email verification", 
-                    text:'Hi, \n\n'+
-                        'You are receiving this because you(or someone else) have requested the reset'+ 
-                        'of the password for your account.\n\nPlease click on the following link,'+
-                        'or paste this into your browser to complete the process within one hour of' +
-                        ' receiving it:\n\n' + 'https://codeword-group03.herokuapp.com/resetPassword/'+token+'\n\n' + 
-                        'If you did not request this, please ignore this email and your password will remain unchanged.\n\n'+
-                        'Thank you!\n'+
-                        'Team codeword group03',
-                    html: template(replacements)
-                }
-            console.log('sending mail')
-
-                    transporter.sendMail(mailoptions, function (err, response) {
-                        if (err) {
-                            res.json({code: 400, message:err});
-                        } 
-                })
-            })
-
                     var newToken = jwt.sign({email: body.email, id: user.id },'codewordnwmsu',{expiresIn:  10000 * 3000 }).toString();
                     console.log(newToken)
                     UserModel.updateOne({emailKey: body.email},

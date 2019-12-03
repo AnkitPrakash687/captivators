@@ -1,37 +1,35 @@
 
 var mongoose = require('mongoose');
 var validator = require('validator');
-var CourseStudentModel = mongoose.model('CourseStudentModel', {
-    CourseNameKey: {
+var UxdScheduleModel = mongoose.model('UxdScheduleModel', {
+    clientId: {
     type: String,
     required: true,
     trim: true,
     minlength: 6
    },
-   EmailKey: {
+   advisorId: {
     type: String,
     required: true,
     trim: true,
-    minlength:4,
-    validate:{
-        validator: (value) =>{
-            return validator.isEmail(value);
-        }
-    }
+    minlength: 6
    },
-   StudentName:{
-    type: String,
+   time:{
+    type: Date,
     require: true,
    },
-   Codeword:{
-    type: String,
-    require: true,
-    minlength: 3
-   },
-   Acknowledged: {
+   paid:{
     type: Boolean,
-    require: true,
     default: false
+   },
+   paymentId: {
+    type: String,
+   },
+   paymentDate: {
+       type: Date
+   },
+   paymentMethod:{
+       type: String
    }
 });
-module.exports.CourseStudentModel = CourseStudentModel
+module.exports.UxdScheduleModel = UxdScheduleModel
