@@ -6,7 +6,7 @@ import { grey, green } from '@material-ui/core/colors'
 import API from '../../API'
 import Cards from 'react-credit-cards';
 import CreditCardInput from 'react-credit-card-input';
-
+import 'react-credit-cards/es/styles-compiled.css';
 const useStyles = makeStyles(theme => ({
   '@global': {
     body: {
@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   },
 
   textField: {
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(1),
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
     width: 200,
@@ -43,7 +43,7 @@ export default function Payment() {
   const classes = useStyles()
 
   const [error, setError] = useState({
-    email: false,
+    expiry: false,
     number: false,
     password: false,
     confirmPassword: false,
@@ -58,7 +58,11 @@ export default function Payment() {
     focus: '',
     name: '',
     number: '',
+    address: '',
+    zipCode: '',
+    country: ''
   })
+
 
   const handleSubmit = (event) =>{
     event.preventDefault()
@@ -71,28 +75,41 @@ export default function Payment() {
  
   }
   const handleChange = name => (event) => {
-    console.log({ [name]: event.target.value })
-    setState({ ...state, [name]: event.target.value });
-    // if([name]=='instructor'){
-    //     setState({ ...state, [name]: isChecked });
-    // }
-
-  }
-
-  const handleInputFocus = (e) => {
-    setState({ focus: e.target.name });
-  }
-  
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+   // console.log({ [name]: event.target.value })
+    var regCardNumber = RegExp("^[0-9]{0,16}$")
+    var regExp = RegExp("^(0[1-9]|1[0-2])([0-9]{2})")
+    var regExp1 = RegExp("^[0-9]{4}$")
+    var regExpiry = RegExp("^[0-9]{0,4}$")
+    if([name]=='number'){
     
-    setState({ [name]: value });
+      if([name]=='number' && regCardNumber.test(event.target.value)){
+      
+        setState({ ...state, [name]: event.target.value });
+      }
+    }else if([name] == 'expiry' && regExpiry.test(event.target.value)){
+     console.log(event.target.value)
+     
+          setState({ ...state, [name]: event.target.value  });
+        if(!regExp1.test(event.target.value) || !regExp.test(event.target.value)){
+          setError({...error,expiry:true})
+        }else{
+          setError({...error,expiry:false})
+        }
+
+    }
+    else if([name] == 'cvc' || [name] == 'name' || [name] == 'address' || [name] == 'zipCode'){
+    setState({ ...state, [name]: event.target.value });
+    }
+   
+
   }
+
+
   return (
     <Container component="main" className={classes.root}>
     
         <div>
-          <Box display="flex" justifyContent="center" style={{ width: '100%', padding: '50px 0px 0px 0px' }}>
+          <Box display="flex" justifyContent="center" style={{ width: '100%', padding: '0px 0px 0px 0px' }}>
             <Typography component="div">
               <Box color={grey[700]} fontWeight="bold" fontSize="h4.fontSize">
                 Payment <br />
@@ -113,18 +130,11 @@ export default function Payment() {
      
       </div>
         <Box display="flex" justifyContent="center" style={{ width: '100%', padding: '20px 0px 0px 0px' }}>
-            <div>
-                  <CreditCardInput
-                      cardNumberInputProps={{ value: state.number, onChange: handleInputChange }}
-                      cardExpiryInputProps={{ value: state.expiry, onChange: handleInputChange }}
-                      cardCVCInputProps={{ value: state.cvc, onChange: handleInputChange }}
-                      fieldClassName="input"
-                  />
-              </div>
+          
         <form className={classes.container} onSubmit={handleSubmit}>
           <div>
           <TextField
-              reuired
+              required
               id="name"
               label="Name"
               className={classes.textField}
@@ -133,52 +143,75 @@ export default function Payment() {
               value={state.name}
               onChange={handleChange('name')}
             />
-            <TextField
-            required
-              error={error.email}
-              id="email"
-              label="Email"
-              helperText={error.message}
+
+          <TextField
+              required
+              id="name"
+              label="Card Number"
               className={classes.textField}
               margin="dense"
               variant="outlined"
-              value={state.email}
-              onChange={handleChange('email')}
+              value={state.number}
+              onChange={handleChange('number')}  
             />
+          
           </div>
+
+
   
           <div>
           <TextField
-          required
-              error={error.password}
-              id="password"
-              label="Password"
-              type="password"
-              helperText={error.message}
+              required
+              id="name"
+              label="Expiry Date(MM/YY)"
               className={classes.textField}
               margin="dense"
               variant="outlined"
-              value={state.password}
-              onChange={handleChange('password')}
+              value={state.expiry}
+              error={error.expiry}
+              helperText={error.expiry && 'invalid date'}
+              onChange={handleChange('expiry')}
             />
             <TextField
-            required
-              error={error.confirmPassword}
+              required
               type="password"
-              id="confirmPassword"
-              label="Confirm Password"
-              helperText={error.message}
+              id="name"
+              label="cvc"
               className={classes.textField}
               margin="dense"
               variant="outlined"
-              value={state.confirmPassword}
-              onChange={handleChange('confirmPassword')}
+              value={state.cvc}
+              onChange={handleChange('cvc')}
             />
           </div>
+<div>
+          <TextField
+              required
+              id="address"
+              label="Billing Address"
+              multiline
+              row={3}
+              className={classes.textField}
+              margin="dense"
+              variant="outlined"
+              value={state.address}
+              onChange={handleChange('address')}
+            />
+                  <TextField
+              required
+              id="zipCode"
+              label="Zip Code"
+              className={classes.textField}
+              margin="dense"
+              variant="outlined"
+              value={state.zipCode}
+              onChange={handleChange('zipCode')}
+            />
+            </div>
           <div>
           <Box display="flex" justifyContent="center" style={{ width: '100%', padding: '20px 0px 0px 0px' }}>
             <Button type="submit" variant="contained" className={classes.button}>
-              Sign up
+              Pay
             </Button>
             </Box>
           </div>

@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import {AppBar, Grid, Box, Toolbar, Typography, Button} from '@material-ui/core'
 import {grey} from '@material-ui/core/colors'
-
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom"
 const useStyles = makeStyles(theme => ({
     
     root: {
@@ -26,6 +26,17 @@ const useStyles = makeStyles(theme => ({
   
   export default function NavBar(props){
       const classes = useStyles()
+      const [logout, setLogout] = useState(false)
+      const handleLogout = () =>{
+          sessionStorage.clear()
+          setLogout(true)
+      }
+
+      if(logout){
+        return (
+          <Redirect to='/'></Redirect>
+        )
+      }
       return(
         <div className={classes.root}>
         <AppBar position="static" className={classes.appBar}>
@@ -39,17 +50,21 @@ const useStyles = makeStyles(theme => ({
             <Box>
             <Grid  container>
                 <Grid xs={12} item>
-            <Button className={classes.button}>Home</Button>
+            <Button
+             className={classes.button}
+             onClick={()=>{return <Redirect to='/'></Redirect>}}
+             >Home</Button>
             <Button className={classes.button}>About us</Button>
             <Button className={classes.button}>Contact us</Button>
             <Button className={classes.button}>Help</Button>
            
          
             {
-            props.isLoggedIn ?
-            <Button className={classes.button}>Logout</Button>
-            :
-            <Button className={classes.button}>Login</Button>
+            props.isLoggedIn &&
+            <Button className={classes.button}
+            onClick={handleLogout}
+            >Logout</Button>
+
             }
             
              </Grid>

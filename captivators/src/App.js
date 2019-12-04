@@ -10,15 +10,16 @@ import Home from './component/Home'
 import FindAdvisorList from './component/client/FindAdvisorList';
 import AdvisorDetail from './component/client/AdvisorDetail'
 import Payment from './component/client/Payment'
+import PrivateRoute from './component/PrivateRoute'
 function App() {
   return (
     <div style={{background: grey[600]}}>
     <Router>
-      <Route path="/client" component={ClientDashboard}/>
-      <Route path="/advisor" component={AdvisorDashboard}/>
-      <Route path="/admin" component={AdminDashboard}/>
-      <Route path="/searchResult" component={FindAdvisorList}/>
-      <Route path="/advisorDetail/:id" component={AdvisorDetail}/>
+      <PrivateRoute path="/client" component={ClientDashboard}/>
+      <PrivateRoute path="/advisor" component={AdvisorDashboard}/>
+      <PrivateRoute path="/admin" component={AdminDashboard}/>
+      <PrivateRoute path="/searchResult" component={FindAdvisorList}/>
+      <PrivateRoute path="/advisorDetail/:id" component={AdvisorDetail}/>
       <Route exact path="/" component={Home} />
     
     </Router>

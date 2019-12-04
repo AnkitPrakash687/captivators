@@ -86,16 +86,19 @@ export default function LoginForm() {
 
   const handleSubmit = () =>{
       if(state.email == 'client' && state.password == '1234'){
+        sessionStorage.setItem('token', '12312')
             setLogin({
                 isLoggedIn: true,
                 role: 1
             })
       }else if(state.email == 'advisor' && state.password == '1234'){
+        sessionStorage.setItem('token', '12312')
         setLogin({
             isLoggedIn: true,
             role: 2
         })
       }else if(state.email == 'admin' && state.password == '1234'){
+        sessionStorage.setItem('token', '12312')
         setLogin({
             isLoggedIn: true,
             role: 3
