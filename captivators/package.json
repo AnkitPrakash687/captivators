@@ -10,6 +10,7 @@
     "@material-ui/styles": "^4.4.1",
     "date-fns": "^2.0.0-alpha.16",
     "material-ui-pickers": "^2.2.4",
+    "query-string": "^6.9.0",
     "react": "^16.11.0",
     "react-credit-card-input": "^1.1.5",
     "react-credit-cards": "^0.8.0",

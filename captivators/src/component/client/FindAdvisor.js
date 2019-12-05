@@ -88,7 +88,8 @@ useEffect(()=>{
       open: false
     })
   }
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault()
         if(state.searchByName == '' && state.searchByLocation == ''){
           setSnack({
             open: true,
@@ -158,7 +159,6 @@ if(redirect){
                 margin="dense"
                 variant="outlined"
                 value={state.searchByName}
-                type="password"
                 onChange={handleChange('searchByName')}
               />
             </div>

@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
 
 router.post('/signup', usersController.signUp);
 router.post('/signin', usersController.signIn);
-router.post('/forgotPassword', usersController.forgotPassword)
+router.post('/details', usersController.details)
 router.post('/resetPassword', usersController.resetPassword)
 router.post('/verifyEmail', usersController.verifyEmail)
 module.exports = router;

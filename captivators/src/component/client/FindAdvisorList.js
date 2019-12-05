@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import NavBar from '../NavBar'
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper, Box, Container, TextField, Typography, Button,
@@ -9,7 +9,8 @@ import Advisor from './Advisor'
 import Profile from '../../images/profile.png'
 import CloseIcon from '@material-ui/icons/Close';
 import FindAdvisor from '../client/FindAdvisor';
-
+import queryString from 'query-string'
+import API from '../../API'
 const useStyles = makeStyles(theme => ({
     '@global': {
         body: {
@@ -30,12 +31,60 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function FindAdvisorList() {
+export default function FindAdvisorList(props) {
     const classes = useStyles()
     const [snack, setSnack] = useState({
         open: false,
         message: ''
     })
+
+    const query = queryString.parse(props.location.search)
+    const [search, setSearch] = useState({
+        location: query.location,
+        name: query.name
+    })
+    var [advisorList, setAdvisorList] = useState([])
+    //console.log('--------QUERY-------', values)
+    useEffect(()=>{
+        var query = queryString.parse(props.location.search)
+        console.log(query)
+        API.post('auth/details')
+        .then(response =>{
+ 
+        console.log(response.data)
+       console.log(typeof query.location)
+         var advisors = response.data
+            if(typeof query.location != 'undefined'){
+                var location = query.location.toLowerCase()
+                   advisors = advisors.filter((item) =>{
+                        console.log(query.location, item.city, item.state, item.zipcode)
+                        if(item.city.toLowerCase().includes(location) 
+                        || item.state.includes(location) 
+                        || item.zipcode.toString().includes(location)){
+                            return item
+                        }
+                    })
+            }
+
+           else if(typeof query.name != 'undefined'){
+               var name = query.name.toLowerCase()
+                advisors = advisors.filter((item) =>{
+                    console.log(query.name, item.name)
+                     if(item.name.toLowerCase().includes(name)){
+                         return item
+                     }
+                 })
+         }
+        
+            console.log('filtered',advisors)
+            setAdvisorList(advisors)
+        })
+       // console.log(search)
+        
+    }, [props.location.search])
+  
+
+   
     var isLoggedIn = sessionStorage.getItem('isLoggedIn')
     return (
         <div>
@@ -56,15 +105,25 @@ export default function FindAdvisorList() {
                             <Box display="flex" justifyContent="left" style={{ width: '100%' }}>
                                 <Typography component="div">
                                     <Box color={grey[800]}  fontSize="h8.fontSize">
-                                        {'We found 2 advisors'}
+                                        {'We found '+advisorList.length+' advisors'}
                                     </Box>
                                 </Typography>
                             </Box>
                         </Paper>
                     </div>
                     <Box display="flex" flexDirection="column"justifyContent="center" style={{ width: '100%' }}>
-                       <Advisor profile={Profile}/>
-                       <Advisor profile={Profile}/>
+                    {
+                                advisorList.map((item)=>{
+                                    return <Advisor
+                                     profile={Profile}
+                                     name={item.name}
+                                     email={item.email_id}
+                                     city={item.city}
+                                     state={item.state}
+                                     zipcode={item.zipcode}
+                                     ></Advisor>
+                                })
+                            }
                     </Box>
                 </Paper>
                 </Grid>

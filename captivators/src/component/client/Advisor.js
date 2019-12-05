@@ -63,24 +63,25 @@ export default function Advisor(props){
         <Box style={{margin: '20px 10px 0px 10px'}} display="flex" flexDirection="column" >
           <div>
           <Typography variant="h8">
-            Ankit Prakash
+            {props.name}
           </Typography>
           </div>
           <div>
           <Typography variant="h8">
-          (660)-324-5554
+          {props.email}
           </Typography>
           </div><br/>
           <div>
           <Typography variant="body">
-          1121 N College Drive <br/>
-          Maryville, MO
+          {props.street} <br/>
+          {props.city}, {props.state}
           </Typography>
           </div><br/>
         </Box>
         <Box className={classes.messageBox} display="flex" flexDirection="column" >
             <Paper className={classes.message}>
-              Bio
+              Bio  <br/>
+              {props.bio}
             </Paper>
           </Box>
         <Box display="flex" flexDirection="column" >

@@ -43,6 +43,7 @@ var signUp = (req,res) => {
             body.password = hash;
             var userModel = new UserModel({
                 name: body.name.trim(),
+                password:hash,
                 email_id: body.email.toLowerCase(),
                 create_at: date.toISOString(),
                 updated_at: date.toISOString()
@@ -66,7 +67,7 @@ var signUp = (req,res) => {
                     
                             return res.json({ 
                                 code: 200, 
-                                message: 'Signed up successfully. Please verify your email before signing in', 
+                                message: 'Signed up successfully.', 
                                 token: newToken,
                                 role: user.role });
                             })
@@ -133,9 +134,7 @@ var signIn = (req,res) => {
             console.log(result)
             if(result){
 
-                if(!User.isEmailVerified){
-                    return res.json({ code: 401, message: 'Verify the email before signing in'})
-                }
+              
                 var newToken = jwt.sign({email: email, id: User.id },'codewordnwmsu',{expiresIn:  10000 * 3000 }).toString();
                 console.log(newToken)
                 UserModel.updateOne({emailKey: email},{$set: {token: newToken}}, (err) =>{
@@ -147,17 +146,16 @@ var signIn = (req,res) => {
                             $set: {
                                 last_login: new Date()
                             }
-                        }, (err, User)=>{
+                        }, (err)=>{
                         if(err){
                             return res.json({ code: 401, message: 'Something went wrong'});
                         }
+                        console.log('-----ROLE-------', User)
                         return res.json({ 
                             code: 200, 
-                            message: 'Signed in successfully. Redirecting.', 
-                            token: newToken,
-                            firstName: User.first_name,
-                            lastName: User.last_name,
-                            role: User.role });
+                            message: 'Signed in successfully.',
+                            role: User.role 
+                           });
                         })
                    
                 })
@@ -170,19 +168,13 @@ var signIn = (req,res) => {
 module.exports.signIn = signIn;
 
 var details = (req,res) => {    
-    console.log('email'+ req.session.id);
-    UserModel.findOne({_id: req.session.id}).then((user) => {
+    console.log(req.body);
+    UserModel.find({role:"advisor"}).then((user) => {
     if(!user){
         return  res.status(400).send("User details not found!!");
     }
     console.log('user'+user);        
-    return res.send({email_id: user.email_id, 
-        firstName: user.first_name,
-        lastName: user.last_name, 
-        role:user.role,
-        instructorRequest: user.instructor_role_request,
-        role: user.role
-    });
+    return res.send(user);
     });
 }
 module.exports.details = details;

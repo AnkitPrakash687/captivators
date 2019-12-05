@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import NavBar from './NavBar'
 import { makeStyles } from '@material-ui/core/styles';
-import { Paper, Box, Container, TextField, Typography, Button } from '@material-ui/core'
+import { Paper, Box, Container, TextField, Typography, Button, Snackbar, IconButton
+ , Slide} from '@material-ui/core'
 import { grey, green } from '@material-ui/core/colors'
 import API from '../API'
+import CloseIcon from '@material-ui/icons/Close';
 const useStyles = makeStyles(theme => ({
   '@global': {
     body: {
@@ -46,7 +48,8 @@ export default function SignupForm() {
     number: false,
     password: false,
     confirmPassword: false,
-    message:''
+    confirmPasswordMessage:'',
+    emailMessage:''
   })
 
   const [state, setState] = useState({
@@ -57,6 +60,10 @@ export default function SignupForm() {
     confirmPassword: ''
   })
 
+  const [snack, setSnack] = useState({
+    open: false,
+    message: ''
+  })
   const handleSubmit = (event) =>{
     event.preventDefault()
     var data = state
@@ -64,15 +71,52 @@ export default function SignupForm() {
      .then(response =>{
       console.log('👉 Returned data:', response);
       console.log(response.data.code)
+      if(response.data.code == 200){
+        setSnack({
+          open: true,
+          message: 'User registered sucessfully'
+        })
+        setState({ 
+          name: '',
+        email: '',
+        number: '',
+        password: '',
+        confirmPassword: ''})
+      }else{
+        setSnack({
+          open: true,
+          message: 'User already registered'
+        })
+        setState({ name: '',
+        email: '',
+        number: '',
+        password: '',
+        confirmPassword: ''})
+      }
      })
  
   }
   const handleChange = name => (event) => {
     console.log({ [name]: event.target.value })
     setState({ ...state, [name]: event.target.value });
-    // if([name]=='instructor'){
-    //     setState({ ...state, [name]: isChecked });
-    // }
+    if([name]=='confirmPassword'){
+      console.log(event.target.value + ' ' + state.password)
+        if(event.target.value.length > 0 && (event.target.value !== state.password)){
+          setError({...error, confirmPassword:true, confirmPasswordMessage: 'Password do not match' })
+        }else{
+          setError({...error, confirmPassword:false, confirmPasswordMessage: '' })
+        }
+    }
+    var regEmail = RegExp("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
+    if([name] == 'email'){
+      console.log(event.target.value, regEmail.test(event.target.value))
+          if(event.target.value.length > 0 && !(regEmail.test(event.target.value))){
+            setError({...error, email:true, emailMessage: 'Invalid email format' })
+          }else{
+            setError({...error, email:false, emailMessage: '' })
+
+          }
+    }
 
   }
   return (
@@ -113,7 +157,7 @@ export default function SignupForm() {
               error={error.email}
               id="email"
               label="Email"
-              helperText={error.message}
+              helperText={error.emailMessage}
               className={classes.textField}
               margin="dense"
               variant="outlined"
@@ -142,7 +186,7 @@ export default function SignupForm() {
               type="password"
               id="confirmPassword"
               label="Confirm Password"
-              helperText={error.message}
+              helperText={error.confirmPasswordMessage}
               className={classes.textField}
               margin="dense"
               variant="outlined"
@@ -152,7 +196,11 @@ export default function SignupForm() {
           </div>
           <div>
           <Box display="flex" justifyContent="center" style={{ width: '100%', padding: '20px 0px 0px 0px' }}>
-            <Button type="submit" variant="contained" className={classes.button}>
+            <Button 
+            disabled={error.confirmPassword || error.email}
+            type="submit" 
+            variant="contained" 
+            className={classes.button}>
               Sign up
             </Button>
             </Box>
@@ -160,6 +208,33 @@ export default function SignupForm() {
         </form>
         </Box>
       </Paper>
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        TransitionComponent={Slide}
+        TransitionProps={
+            { direction: "right" }
+        }
+        open={snack.open}
+        autoHideDuration={2000}
+        variant="success"
+        onClose={() => { setSnack({ open: false }) }}
+        message={snack.message}
+        action={[
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            className={classes.close}
+            onClick={() => { setSnack({ open: false }) }}
+          >
+            <CloseIcon />
+          </IconButton>,
+        ]}
+      ></Snackbar>
     </Container>
   )
 }
