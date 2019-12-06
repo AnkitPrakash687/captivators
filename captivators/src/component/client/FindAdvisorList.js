@@ -116,10 +116,13 @@ export default function FindAdvisorList(props) {
                                 advisorList.map((item)=>{
                                     return <Advisor
                                      profile={Profile}
+                                     id={item._id}
+                                     bio={item.bio}
                                      name={item.name}
                                      email={item.email_id}
                                      city={item.city}
                                      state={item.state}
+                                     street={item.street}
                                      zipcode={item.zipcode}
                                      ></Advisor>
                                 })

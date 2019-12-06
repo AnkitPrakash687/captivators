@@ -3,6 +3,7 @@ var _ = require('lodash');
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var { UserModel } = require('../model/model.user');
+var  {UxdScheduleModel}  = require('../model/model.coursestudent');
 var mailController = require('../config/user.mail.js')
 const crypto = require('crypto');
 require('dotenv').config();
@@ -83,43 +84,73 @@ var signUp = (req,res) => {
 }
 module.exports.signUp = signUp;
 
-const verifyEmail = (req, res) => {
-   console.log('working email verify')
-    let body = _.pick(req.body, ['token', 'password'])
-    console.log(body.token)
-    UserModel.findOne({emailVerificationToken: body.token},
-       (error, user)=>{
-          if(error){
-              res.json({code: 400, message:'Something went wrong'})
-          }
-          console.log(user)
-        if(user){
+const schedule = (req, res) => {
 
-          UserModel.updateOne({emailVerificationToken: body.token}, 
-            {
-                $set: {
-                    emailVerificationToken: null,
-                    isEmailVerified: true
-                }
-            }, (err, User)=>{
-                if(err){
-                    res.json({code: 400, message:'Something went wrong'})
-                }
-                res.json({code: 200, message:'Email Verified'})
+    var body = _.pick(req.body,['clientId','advisorId','date','time', 'message']);
+    console.log(body) 
 
-            })
-        }else{
-            res.json({code: 400, message:'invalid code'})
+    var date = new Date(body.date.split('T')[0] + 'T' + body.time.split('T')[1])
+
+    var scheduleModel = new UxdScheduleModel({
+        clientId: body.clientId,
+        advisorId: body.advisorId,
+        date: date,
+        message: body.message
+    });
+    scheduleModel.save().then((schedule) => {
+
+        if(schedule){
+            res.json({code:200})
         }
+    })
+    .catch(e =>{
+        console.log(e)
+    })
+    
+}
 
-        }
-    )
-       
+module.exports.schedule = schedule
+
+const getschedule = (req, res) => {
+
+    var body = _.pick(req.body,['email']);
+    UxdScheduleModel.find({clientId: body.email}, function (err, schedule) {
+     if(err){
+         return res.json({ code: 401, message: err});
+     } 
+
+     
+     return res.json({ code: 200, data:schedule})
+ })
+    
+}
+
+module.exports.getschedule = getschedule
+
+const getuser= (req, res) => {
+
+    var body = _.pick(req.body,['id']);
+    console.log(body.id)
+
+    UserModel.findById(body.id, function (err, user) {
+        console.log(user)
+     if(err){
+         return res.json({ code: 401, message: err});
+     }    
+     return res.json({ code: 200, data:user})
+ })
+    
+}
+
+module.exports.getuser = getuser
+
+const payment = (req, res) => {
+
+
    
 }
 
-module.exports.verifyEmail = verifyEmail
-
+module.exports.payment = payment
 var signIn = (req,res) => {
     console.log('signIn working')
     var body = _.pick(req.body,['email','password']);

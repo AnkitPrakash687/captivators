@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
           sessionStorage.clear()
           setLogout(true)
       }
-
+      var isLoggedIn = sessionStorage.getItem('isLoggedIn')
       if(logout){
         return (
           <Redirect to='/'></Redirect>
@@ -60,7 +60,7 @@ const useStyles = makeStyles(theme => ({
            
          
             {
-            props.isLoggedIn &&
+            isLoggedIn &&
             <Button className={classes.button}
             onClick={handleLogout}
             >Logout</Button>

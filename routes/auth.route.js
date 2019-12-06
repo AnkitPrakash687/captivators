@@ -15,5 +15,8 @@ router.post('/signup', usersController.signUp);
 router.post('/signin', usersController.signIn);
 router.post('/details', usersController.details)
 router.post('/resetPassword', usersController.resetPassword)
-router.post('/verifyEmail', usersController.verifyEmail)
+router.post('/schedule', usersController.schedule)
+router.post('/getschedule', usersController.getschedule)
+router.post('/getuser', usersController.getuser)
+router.post('/payment', usersController.payment)
 module.exports = router;

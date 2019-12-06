@@ -5,16 +5,12 @@ var UxdScheduleModel = mongoose.model('UxdScheduleModel', {
     clientId: {
     type: String,
     required: true,
-    trim: true,
-    minlength: 6
    },
    advisorId: {
     type: String,
     required: true,
-    trim: true,
-    minlength: 6
    },
-   time:{
+   date:{
     type: Date,
     require: true,
    },
@@ -24,12 +20,16 @@ var UxdScheduleModel = mongoose.model('UxdScheduleModel', {
    },
    paymentId: {
     type: String,
+    default: null
    },
    paymentDate: {
-       type: Date
+       type: Date,
+       default:null
    },
-   paymentMethod:{
-       type: String
+   message:{
+       type: String,
+       default:''
    }
+ 
 });
 module.exports.UxdScheduleModel = UxdScheduleModel

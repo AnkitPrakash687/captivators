@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import NavBar from '../NavBar'
 import { makeStyles } from '@material-ui/core/styles';
 import SignupForm from '../SignupForm';
@@ -7,6 +7,7 @@ import { Grid, Paper, Box, Typography, Button } from '@material-ui/core';
 import Footer from '../Footer';
 import ScheduleForm from './ScheduleForm'
 import Profile from '../../images/profile.png'
+import API from '../../API'
 const useStyles = makeStyles(theme => ({
     '@global': {
       body: {
@@ -23,14 +24,39 @@ const useStyles = makeStyles(theme => ({
         padding: theme.spacing(2)
    },
    message:{
-       minHeight: 500
+       
    }
     
   }));
 
   
-  export default function AdvisorDetail(){
+  export default function AdvisorDetail(props){
       const classes = useStyles()
+
+      const [state, setState] = useState({
+        name:'',
+        email:'',
+        street:'',
+        city: '',
+        state: '',
+        zipcode:'',
+        bio:''      })
+
+      useEffect(()=>{
+        var id = props.match.params.id
+        API.post('auth/details')
+        .then(response =>{
+          var advisors = response.data
+          advisors = advisors.filter((item)=>{
+                if(item._id == id){
+                    return item
+                }
+          })
+          setState(advisors[0])
+          console.log(advisors[0])
+        })
+      },[])
+
       return(
           <div>
               <NavBar/>
@@ -52,25 +78,34 @@ const useStyles = makeStyles(theme => ({
         <Box style={{margin: '20px 10px 0px 10px'}} display="flex" flexDirection="column" >
           <div>
           <Typography variant="h8">
-            Ankit Prakash
+            {state.name}
           </Typography>
           </div>
           <div>
           <Typography variant="h8">
-          (660)-324-5554
+          {state.email_id}
           </Typography>
           </div><br/>
           <div>
           <Typography variant="body">
-          1121 N College Drive <br/>
-          Maryville, MO
+         {state.street} <br/>
+          {state.city}, {state.state}
           </Typography>
           </div><br/>
         </Box>
    
         <Box className={classes.messageBox} display="flex" flexDirection="column" >
             <Paper className={classes.message}>
-              Bio
+            <Typography  component="div">
+                            <Box color="black" fontWeight="bold">
+                               Bio
+                        </Box>
+                        </Typography>
+            <Typography  component="div">
+                            <Box color="grey" fontSize={15}>
+                               {state.bio}
+                        </Box>
+                        </Typography>
             </Paper>
           </Box>
 
@@ -78,7 +113,7 @@ const useStyles = makeStyles(theme => ({
                  </Paper>
                   </Grid>
                   <Grid item sm={6} >
-                  <ScheduleForm></ScheduleForm>    
+                  <ScheduleForm id={props.match.params.id}></ScheduleForm>    
                   </Grid>
               </Grid>
              <Footer/>

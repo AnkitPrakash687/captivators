@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-d
 import CloseIcon from '@material-ui/icons/Close';
 import { DatePicker, MuiPickersUtilsProvider, TimePicker}  from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
+import API from '../../API'
 const useStyles = makeStyles(theme => ({
   '@global': {
     body: {
@@ -59,7 +60,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function ScheduleForm() {
+export default function ScheduleForm(props) {
   const classes = useStyles()
 
   const [error, setError] = useState({
@@ -73,6 +74,7 @@ export default function ScheduleForm() {
   const [state, setState] = useState({
     date: new Date(),
     time: new Date(),
+    message:''
   })
 
   const [snack, setSnack] = useState({
@@ -92,7 +94,7 @@ export default function ScheduleForm() {
   }
 
   const handleDateChange = name => (date) => {
-
+    console.log(date)
     setState({ ...state, [name]: date });
 }
 
@@ -107,15 +109,31 @@ useEffect(()=>{
       open: false
     })
   }
-  const handleSubmit = () => {
-        if(state.searchByName == '' && state.searchByLocation == ''){
-          setSnack({
-            open: true,
-            message: 'Any of the search fields required'
-          })
+  const handleSubmit = (event) => {
+     event.preventDefault()
+      var data= {
+        clientId: sessionStorage.getItem('token'),
+        advisorId: props.id,
+        date: new Date(state.date.getTime() - state.date.getTimezoneOffset() * 60000),
+        time: new Date(state.time.getTime() - state.time.getTimezoneOffset() * 60000),
+        message: state.message
+      }
+
+      API
+      .post('auth/schedule', data)
+      .then(response =>{
+        console.log(response.data.code)
+        if(response.data.code == '200'){
+              setSnack({
+                open:true,
+                message:'Appointment Scheduled!'
+              })
         }else{
-            setRedirect(true)
+
         }
+      })
+
+
   }
 
   const handleFileChange = (event) => {
@@ -131,19 +149,7 @@ useEffect(()=>{
 
   }
 if(redirect){
-  if(state.searchByName != ''){
  
-   return (<Redirect  push  to={{
-    pathname: "/searchResult",
-    search: '?name='+state.searchByName
-  }}></Redirect>)
-  }else if(state.searchByLocation != ''){
-    return (<Redirect  push  to={{
-      pathname: "/searchResult",
-      search: '?location='+state.searchByLocation
-    }}></Redirect>
-    )
-  }
 }
 
   return (
@@ -187,8 +193,8 @@ if(redirect){
                 margin="normal"
                 id="time"
                 label="Time"
-                value={state.date}
-                onChange={handleDateChange('date')}
+                value={state.time}
+                onChange={handleDateChange('time')}
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
@@ -239,7 +245,7 @@ if(redirect){
                 variant="outlined"
                 value={state.message}
                 type="text"
-                onChange={handleChange('searchByName')}
+                onChange={handleChange('message')}
               />
             </div>
 
@@ -259,7 +265,7 @@ if(redirect){
         </Box>
       </Paper>
 
- <Snackbar
+                <Snackbar
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',

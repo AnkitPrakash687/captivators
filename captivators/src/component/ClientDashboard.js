@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import NavBar from './NavBar'
 import { makeStyles } from '@material-ui/core/styles';
 import SignupForm from './SignupForm';
@@ -11,6 +11,7 @@ import Appointment from './client/Appointment'
 import Profile from './../images/profile.png'
 import CloseIcon from '@material-ui/icons/Close';
 import FindAdvisor from './client/FindAdvisor';
+import API from '../API';
 
 const useStyles = makeStyles(theme => ({
     '@global': {
@@ -33,12 +34,52 @@ const useStyles = makeStyles(theme => ({
 
 
 export default function ClientDashboard() {
+    var isLoggedIn = sessionStorage.getItem('isLoggedIn')
     const classes = useStyles()
     const [snack, setSnack] = useState({
         open: false,
         message: ''
     })
-    var isLoggedIn = sessionStorage.getItem('isLoggedIn')
+
+    const [state, setState] = useState([])
+
+   useEffect(()=>{
+       var data = {
+           email: sessionStorage.getItem('token')
+       }
+       var appointments = []
+        API.post('auth/getschedule', data)
+        .then(response =>{
+            
+            if(response.data.code == 200){
+                var schedule = response.data.data
+               schedule.map((item)=>{
+                   API.post('auth/getuser', {id: item.advisorId})
+                   .then(user =>{
+                       console.log(user)
+                       var advisor = user.data.data
+                       var data ={
+                            name: advisor.name,
+                            street: advisor.street,
+                            email: advisor.email_id,
+                            city: advisor.city,
+                            state: advisor.state,
+                            zipcode: advisor.zipcode,
+                            date: item.date,
+                            paid: item.paid
+                       }
+                      // console.log(data)
+                            appointments.push(data)
+                            setState(appointments)
+                            console.log(state)
+                   })
+               })
+            }
+        })
+       
+   }, [])
+
+   
     return (
         <div>
             <NavBar isLoggedIn={isLoggedIn} /> 
@@ -58,8 +99,12 @@ export default function ClientDashboard() {
                         </Paper>
                     </div>
                     <Box display="flex" flexDirection="column"justifyContent="center" style={{ width: '100%' }}>
-                       <Appointment profile={Profile} paid={false}></Appointment>
-                       <Appointment profile={Profile} paid={true}></Appointment>
+                        {
+                            state.map((item)=>{
+                                return <Appointment profile={Profile} paid={item.paid}></Appointment>
+                            })
+                        }
+                      
                     </Box>
                 </Paper>
                 </Grid>
