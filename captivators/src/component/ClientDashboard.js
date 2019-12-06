@@ -53,27 +53,19 @@ export default function ClientDashboard() {
             
             if(response.data.code == 200){
                 var schedule = response.data.data
-               schedule.map((item)=>{
-                   API.post('auth/getuser', {id: item.advisorId})
-                   .then(user =>{
-                       console.log(user)
-                       var advisor = user.data.data
+                console.log(schedule)
+                setState(schedule)
                        var data ={
-                            name: advisor.name,
-                            street: advisor.street,
-                            email: advisor.email_id,
-                            city: advisor.city,
-                            state: advisor.state,
-                            zipcode: advisor.zipcode,
-                            date: item.date,
-                            paid: item.paid
+                            name: schedule.name,
+                            street: schedule.street,
+                            email: schedule.email_id,
+                            city: schedule.city,
+                            state: schedule.state,
+                            zipcode: schedule.zipcode,
+                            date: schedule.date,
+                            paid: schedule.paid
                        }
-                      // console.log(data)
-                            appointments.push(data)
-                            setState(appointments)
-                            console.log(state)
-                   })
-               })
+          
             }
         })
        
@@ -98,10 +90,23 @@ export default function ClientDashboard() {
                             </Box>
                         </Paper>
                     </div>
+                    
                     <Box display="flex" flexDirection="column"justifyContent="center" style={{ width: '100%' }}>
                         {
                             state.map((item)=>{
-                                return <Appointment profile={Profile} paid={item.paid}></Appointment>
+                                return <Appointment 
+                                profile={Profile}
+                                id={item._id}
+                                bio={item.bio}
+                                name={item.name}
+                                email={item.email_id}
+                                city={item.city}
+                                state={item.state}
+                                street={item.street}
+                                zipcode={item.zipcode}
+                                paymentDate={item.paymentDate}
+                                date={(new Date(item.date)).toUTCString().replace('GMT', '')}
+                                paid={item.paid}></Appointment>
                             })
                         }
                       

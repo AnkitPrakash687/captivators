@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import NavBar from '../NavBar'
 import { makeStyles } from '@material-ui/core/styles';
-import { Paper, Box, Container, TextField, Typography, Button } from '@material-ui/core'
+import { Paper, Box, Container, TextField, Typography, Button, Snackbar, IconButton, Slide } from '@material-ui/core'
 import { grey, green } from '@material-ui/core/colors'
 import API from '../../API'
 import Cards from 'react-credit-cards';
 import CreditCardInput from 'react-credit-card-input';
 import 'react-credit-cards/es/styles-compiled.css';
+import CloseIcon from '@material-ui/icons/Close';
 const useStyles = makeStyles(theme => ({
   '@global': {
     body: {
@@ -39,7 +40,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function Payment() {
+export default function Payment(props) {
   const classes = useStyles()
 
   const [error, setError] = useState({
@@ -63,14 +64,25 @@ export default function Payment() {
     country: ''
   })
 
+  const [snack, setSnack] = useState({
+    open: false,
+    message: ''
+  })
 
   const handleSubmit = (event) =>{
     event.preventDefault()
-    var data = state
-     API.post('auth/signup', data)
+    var data = {id: props.id}
+     API.post('auth/payment', data)
      .then(response =>{
       console.log('👉 Returned data:', response);
       console.log(response.data.code)
+      if(response.data.code == 200){
+        setSnack({
+          open:true,
+          message: 'Payment Successfull!'
+        })
+       
+      }
      })
  
   }
@@ -103,6 +115,10 @@ export default function Payment() {
    
 
   }
+const handleClose = () => { 
+  setSnack({ open: false }) 
+  props.onClose()
+}
 
 
   return (
@@ -217,7 +233,32 @@ export default function Payment() {
           </div>
         </form>
         </Box>
-   
+          <Snackbar
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    TransitionComponent={Slide}
+                    TransitionProps={
+                        { direction: "left" }
+                    }
+                    open={snack.open}
+                    autoHideDuration={2000}
+                    variant="success"
+                    onClose={handleClose}
+                    message={snack.message}
+                    action={[
+                        <IconButton
+                            key="close"
+                            aria-label="Close"
+                            color="inherit"
+                            className={classes.close}
+                            onClick={() => { setSnack({ open: false }) }}
+                        >
+                            <CloseIcon />
+                        </IconButton>,
+                    ]}
+                ></Snackbar>
     </Container>
   )
 }

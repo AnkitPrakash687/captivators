@@ -90,19 +90,33 @@ const schedule = (req, res) => {
     console.log(body) 
 
     var date = new Date(body.date.split('T')[0] + 'T' + body.time.split('T')[1])
-
-    var scheduleModel = new UxdScheduleModel({
-        clientId: body.clientId,
-        advisorId: body.advisorId,
-        date: date,
-        message: body.message
-    });
-    scheduleModel.save().then((schedule) => {
-
-        if(schedule){
-            res.json({code:200})
+    UserModel.findById(body.advisorId, (err,user)=>{
+        if(err){
+            return res.json({ code: 401, message: err});
         }
+
+        var scheduleModel = new UxdScheduleModel({
+            clientId: body.clientId,
+            advisorId: body.advisorId,
+            date: date,
+            message: body.message,
+            name: user.name,
+            email_id: user.email_id,
+            bio: user.bio,
+            street: user.street,
+            city: user.city,
+            state: user.state,
+            zipcode: user.zipcode
+        });
+        scheduleModel.save().then((schedule) => {
+    
+            if(schedule){
+                res.json({code:200})
+            }
+        })
+
     })
+    
     .catch(e =>{
         console.log(e)
     })
@@ -118,7 +132,7 @@ const getschedule = (req, res) => {
      if(err){
          return res.json({ code: 401, message: err});
      } 
-
+    
      
      return res.json({ code: 200, data:schedule})
  })
@@ -126,6 +140,36 @@ const getschedule = (req, res) => {
 }
 
 module.exports.getschedule = getschedule
+
+const payment = (req,res) =>{
+    var body = _.pick(req.body,['id']);
+    UxdScheduleModel.updateOne({_id: body.id},
+        {
+            $set:{
+            paid: true,
+            paymentDate: new Date()
+            }
+    },(err, update)=>{
+        if(err){
+            return res.json({ code: 401, message: err});
+        }
+        return  res.json({ code: 200, message: 'paid'});
+    })
+}
+
+module.exports.payment = payment
+
+const cancelPayment = (req,res) =>{
+    var body = _.pick(req.body,['id']);
+    UxdScheduleModel.deleteOne({_id: body.id},(err, update)=>{
+        if(err){
+            return res.json({ code: 401, message: err});
+        }
+        return  res.json({ code: 200, message: 'delete'});
+    })
+}
+
+module.exports.cancelPayment = cancelPayment
 
 const getuser= (req, res) => {
 
@@ -143,12 +187,6 @@ const getuser= (req, res) => {
 }
 
 module.exports.getuser = getuser
-
-const payment = (req, res) => {
-
-
-   
-}
 
 module.exports.payment = payment
 var signIn = (req,res) => {

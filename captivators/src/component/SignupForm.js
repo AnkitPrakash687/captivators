@@ -111,7 +111,7 @@ export default function SignupForm() {
     if([name] == 'email'){
       console.log(event.target.value, regEmail.test(event.target.value))
           if(event.target.value.length > 0 && !(regEmail.test(event.target.value))){
-            setError({...error, email:true, emailMessage: 'Invalid email format' })
+            setError({...error, email:true, emailMessage: 'Valid format: xyz@g.com' })
           }else{
             setError({...error, email:false, emailMessage: '' })
 

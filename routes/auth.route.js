@@ -19,4 +19,5 @@ router.post('/schedule', usersController.schedule)
 router.post('/getschedule', usersController.getschedule)
 router.post('/getuser', usersController.getuser)
 router.post('/payment', usersController.payment)
+router.post('/cancelappointment', usersController.cancelPayment)
 module.exports = router;

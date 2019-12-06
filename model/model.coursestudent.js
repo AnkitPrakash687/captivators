@@ -29,7 +29,31 @@ var UxdScheduleModel = mongoose.model('UxdScheduleModel', {
    message:{
        type: String,
        default:''
-   }
+   },
+   street:{
+    type: String,
+    default: ''
+},
+name:{
+    type: String,
+    default:''
+},
+city:{
+    type: String,
+    default: ''
+},
+state:{
+    type: String,
+    default: ''
+},
+zipcode:{
+    type: Number,
+    default: 64468
+},
+bio:{
+    type: String,
+    default: ''
+},
  
 });
 module.exports.UxdScheduleModel = UxdScheduleModel
