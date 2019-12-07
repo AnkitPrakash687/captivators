@@ -242,7 +242,7 @@ export default function SignupForm() {
                     </Box>
                   </Typography>
                   <LinearProgress
-                    style={{ width: '100px', marginLeft: '20px' }}
+                    style={{ width: '180px', marginLeft: '20px' }}
                     variant="determinate"
                     value={passStrength.value}
                     className={classes.passStrengthBar}
@@ -282,6 +282,8 @@ export default function SignupForm() {
                 onChange={handleChange('confirmPassword')}
               />
             </Grid>
+
+            
             <div>
               <Box display="flex" justifyContent="center" style={{ width: '100%', padding: '20px 0px 0px 0px' }}>
                 <Button
