@@ -57,7 +57,7 @@ const [files, setFiles] = useState([])
   const handleClose = () => {
 
     setOpen(false)
-    setRender(true)
+    
   }
 
   const handlePaymentClose = () => {

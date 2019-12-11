@@ -122,12 +122,24 @@ const handleClose = () => {
 
 
   return (
+    <div>
+        <Box display="flex" justifyContent="flex-end" style={{ width: '100%', padding: '0px 0px 0px 0px' }}>
+                           <IconButton
+                            key="close"
+                            aria-label="Close"
+                            color="inherit"
+                            className={classes.close}
+                            onClick={() => { props.onClose() }}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        </Box>
     <Container component="main" className={classes.root}>
-    
+     
         <div>
           <Box display="flex" justifyContent="center" style={{ width: '100%', padding: '0px 0px 0px 0px' }}>
             <Typography component="div">
-              <Box color={grey[700]} fontWeight="bold" fontSize="h4.fontSize">
+              <Box color={grey[700]} fontWeight="bold" fontSize="h6.fontSize">
                 Payment <br />
               </Box>
             </Typography>
@@ -260,5 +272,6 @@ const handleClose = () => {
                     ]}
                 ></Snackbar>
     </Container>
+    </div>
   )
 }
