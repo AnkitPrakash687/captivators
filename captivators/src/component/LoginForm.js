@@ -152,17 +152,17 @@ export default function LoginForm() {
     sessionStorage.setItem('isLoggedIn', true)
     if (login.role == 'client') {
       return (
-        <Redirect to="/client">
+        <Redirect push to="/client">
 
         </Redirect>
       )
     } else if (login.role == 'advisor') {
       return (
-        <Redirect to="/advisor"></Redirect>
+        <Redirect push to="/advisor"></Redirect>
       )
     } else if(login.role == 'admin'){
       return (
-        <Redirect to="/admin"></Redirect>
+        <Redirect push to="/admin"></Redirect>
       )
     }
   }

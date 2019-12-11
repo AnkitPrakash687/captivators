@@ -83,7 +83,7 @@ const useStyles = makeStyles(theme => ({
             onClick={handleAboutUs}
             >About us</Button>
             <Button className={classes.button}>Contact us</Button>
-            <Button className={classes.button}>Help</Button>
+            {/* <Button className={classes.button}>Help</Button> */}
            
          
             {

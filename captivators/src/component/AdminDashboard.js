@@ -94,43 +94,43 @@ const useStyles = makeStyles(theme => ({
         data: [{
           name: 'Ankit Prakash',
           email: 'ankskk@gmail.com',
-          role:'Student',
+          role:'client',
           status: true
+        },
+        {
+          name: 'Rahul Reddy',
+          email: 'rr@gmail.com',
+          role:'advidor',
+          status: true
+        },
+        {
+          name: 'Havya Ravipatti',
+          email: 'ankskk@gmail.com',
+          role:'client',
+          status: true
+        },
+        {
+          name: 'Ganesh Siripuram',
+          email: 'ganesh@gmail.com',
+          role:'client',
+          status: true
+        },
+        {
+          name: 'Sushma Rani Reddy Aleti',
+          email: 'sushma@gmail.com',
+          role:'client',
+          status: false
         },
         {
           name: 'Ankit Prakash',
           email: 'ankskk@gmail.com',
-          role:'Student',
-          status: true
+          role:'client',
+          status: false
         },
         {
           name: 'Ankit Prakash',
           email: 'ankskk@gmail.com',
-          role:'Student',
-          status: true
-        },
-        {
-          name: 'Ankit Prakash',
-          email: 'ankskk@gmail.com',
-          role:'Student',
-          status: true
-        },
-        {
-          name: 'Ankit Prakash',
-          email: 'ankskk@gmail.com',
-          role:'Student',
-          status: true
-        },
-        {
-          name: 'Ankit Prakash',
-          email: 'ankskk@gmail.com',
-          role:'Student',
-          status: true
-        },
-        {
-          name: 'Ankit Prakash',
-          email: 'ankskk@gmail.com',
-          role:'Student',
+          role:'client',
           status: true
         }
       ],
