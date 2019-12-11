@@ -33,7 +33,10 @@ const useStyles = makeStyles(theme => ({
   button: {
     margin: theme.spacing(2, 0, 0, 0),
     textTransform: 'none'
-  }
+  },
+  input:{
+    display: 'none'
+  },
 
 
 }));
@@ -45,6 +48,8 @@ export default function Appointment(props) {
   const [openPayment, setOpenPayment] = useState(false)
   const [render, setRender] = useState(false)
   const [deleteConfirmation, setDeleteConfirmation] = useState(false)
+  const[openUpload, setOpenUpload] = useState(false)
+const [files, setFiles] = useState([])
   const handlePayment = () => {
     setOpen(true)
   }
@@ -75,6 +80,29 @@ export default function Appointment(props) {
     var paymentDate = new Date(props.paymentDate).toISOString()
 
   })
+
+  const handleFileChange = (event) => {
+    //console.log(event.target.files[0])
+    var targetFiles = event.target.files
+    var fileArray = []
+    for( var x=0; x<targetFiles.length; x++){
+      console.log(targetFiles[x])
+      fileArray.push(targetFiles[x])
+    }
+    setFiles(fileArray)
+    console.log(fileArray)
+
+  }
+
+  const handleUploadClose = () =>{
+    setOpenUpload(false)
+  }
+
+  useEffect(()=>{
+      if(files.length > 0){
+        setOpenUpload(true)
+      }
+  }, [files])
 
   if (render) {
     return <Redirect to='/client'></Redirect>
@@ -120,7 +148,20 @@ export default function Appointment(props) {
         </Grid>
 
         <Box style={{ padding: '10px', marginLeft: '30px' }} display="flex" flexDirection="column" >
-          <Button variant="contained" color="primary" className={classes.button}>Upload Documents</Button>
+        <input
+                accept="image/*"
+                className={classes.input}
+                id="contained-button-file"
+                multiple
+                type="file"
+                onChange={handleFileChange}
+                onClick={(event) => event.target.value = ''}
+              />
+              <label htmlFor="contained-button-file">
+                <Button className={classes.button} variant="contained" color="primary" component="span">
+                  Upload Documents
+                </Button>
+              </label>
           {props.paid ?
             <Button
               variant="contained"
@@ -208,6 +249,42 @@ export default function Appointment(props) {
                          </Button>
                             <Button onClick={cancelappointment} color="primary">
                                 YES
+                        </Button>
+                        </DialogActions>
+                    </Dialog>
+
+                    <Dialog
+                        open={openUpload}
+                        onClose={handleUploadClose}
+                        aria-labelledby="alert-dialog-slide-title"
+                        aria-describedby="alert-dialog-slide-description"
+                    >
+                        <DialogTitle id="alert-dialog-slide-title">{"Files Uploaded"}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-slide-description">
+                            <ol>
+                                {
+                                 
+                                  files.map((file)=>{
+                                    return (
+                                      <li>
+                                      <Typography component="div">
+                                      <Box style={{margin: '0px 0px 0px 20px'}}color={green[800]} fontWeight="bold" fontSize="h8.fontSize">
+                                        {file.name} ({file.size/1000 + ' kb'})
+                                    </Box>
+                                    </Typography>
+                                    </li>
+                                    )
+                                  })
+                                  
+                                }
+                                </ol>
+                        </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                       
+                            <Button onClick={handleUploadClose} color="primary">
+                                OK
                         </Button>
                         </DialogActions>
                     </Dialog>

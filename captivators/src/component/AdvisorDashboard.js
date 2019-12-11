@@ -19,8 +19,8 @@ const useStyles = makeStyles(theme => ({
     },
     root: {
         
-        margin: theme.spacing(5),
-        maxWidth: 700
+        marginTop: theme.spacing(2),
+        marginBottom: theme.spacing(2)
     },
     paper: {
          background: grey[100],

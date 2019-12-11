@@ -51,7 +51,9 @@ export default function ClientRequest(props){
     const classes = useStyles()
     return(
         <Box className={classes.root}>
+          
              <Box style={{margin: '20px 10px 0px 10px'}} display="flex" flexDirection="column" >
+            
             <img 
           className={classes.media}
           style={{
@@ -89,6 +91,7 @@ export default function ClientRequest(props){
             <Button variant="contained" color="primary" className={classes.button}>Download Documents</Button>
             <Button variant="contained" color="primary" className={classes.button}>Send Message</Button>
           </Box>
+         
         </Box>
     )
 }

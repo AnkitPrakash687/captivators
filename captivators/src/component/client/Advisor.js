@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper, Box, Container, TextField, Typography, Button,
-Snackbar, IconButton, Divider } from '@material-ui/core'
+Snackbar, IconButton, Grid } from '@material-ui/core'
 import { grey, green } from '@material-ui/core/colors'
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom"
 import CloseIcon from '@material-ui/icons/Close';
@@ -64,7 +64,10 @@ if(redirect){
   return <Redirect to={path}/>
 }
     return(
+     
         <Box className={classes.root}>
+           <Grid container>
+        <Grid item sm={3}>
             <img 
           className={classes.media}
           style={{
@@ -73,7 +76,10 @@ if(redirect){
           }}
           src={props.profile}
         />
+      </Grid>
+      <Grid item sm={3}>
         <Box style={{margin: '20px 10px 0px 10px'}} display="flex" flexDirection="column" >
+        
           <div>
           <Typography variant="h8">
             {props.name}
@@ -92,7 +98,9 @@ if(redirect){
           </Typography>
           </div><br/>
         </Box>
-        <div className={classes.messageBox} display="flex" flexDirection="column" >
+        </Grid>
+        <Grid item sm={3}>
+        <div style={{margin:'20px'}}className={classes.messageBox} display="flex" flexDirection="column" >
             <Paper  className={classes.message}>
             <Typography  component="div">
                             <Box color="black" fontWeight="bold">
@@ -107,7 +115,9 @@ if(redirect){
               
             </Paper>
           </div>
-        <Box display="flex" flexDirection="column" >
+          </Grid>
+          <Grid item sm={2}>
+        <Box  p={2} display="flex" flexDirection="column" >
             <Button 
             variant="contained" 
             color="primary" 
@@ -117,6 +127,9 @@ if(redirect){
             <Button variant="contained" color="primary" className={classes.button}>Contact</Button>
 
           </Box>
+          </Grid>
+          </Grid>
         </Box>
+       
     )
 }
