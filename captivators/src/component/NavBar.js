@@ -31,12 +31,37 @@ const useStyles = makeStyles(theme => ({
           sessionStorage.clear()
           setLogout(true)
       }
+      const [aboutus , setAboutus] = useState(false)
+      const [home, setHome] = useState(false)
+      const handleAboutUs = (event) =>{
+        event.preventDefault()
+        setAboutus(true)
+      }
       var isLoggedIn = sessionStorage.getItem('isLoggedIn')
       if(logout){
         return (
           <Redirect to='/'></Redirect>
         )
       }
+
+      if(aboutus){
+        return (
+          <Redirect push to='/aboutus'></Redirect>
+        )
+      }
+
+      // if(home){
+      //   if(!isLoggedIn){
+         
+      //   return (
+      //     <Redirect push to='/'></Redirect>
+      //   )
+      //   }else{
+      //     return (
+      //       <Redirect push to='/client'></Redirect>
+      //     )
+      //   }
+      // }
       return(
         <div className={classes.root}>
         <AppBar position="static" className={classes.appBar}>
@@ -52,9 +77,11 @@ const useStyles = makeStyles(theme => ({
                 <Grid xs={12} item>
             <Button
              className={classes.button}
-             onClick={()=>{return <Redirect to='/'></Redirect>}}
+             onClick={()=>{setHome(true)}}
              >Home</Button>
-            <Button className={classes.button}>About us</Button>
+            <Button className={classes.button}
+            onClick={handleAboutUs}
+            >About us</Button>
             <Button className={classes.button}>Contact us</Button>
             <Button className={classes.button}>Help</Button>
            

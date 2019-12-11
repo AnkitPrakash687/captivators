@@ -9,6 +9,7 @@
     "@material-ui/pickers": "^3.2.8",
     "@material-ui/styles": "^4.4.1",
     "date-fns": "^2.0.0-alpha.16",
+    "material-table": "^1.54.1",
     "material-ui-pickers": "^2.2.4",
     "query-string": "^6.9.0",
     "react": "^16.11.0",

@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
       const classes = useStyles()
       return(
           <div>
-              <NavBar/>
+              <NavBar isLoggedIn={false}/>
               <Grid container>
                   <Grid item sm={8}>
                     <SignupForm/>

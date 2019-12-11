@@ -11,6 +11,7 @@ import FindAdvisorList from './component/client/FindAdvisorList';
 import AdvisorDetail from './component/client/AdvisorDetail'
 import Payment from './component/client/Payment'
 import PrivateRoute from './component/PrivateRoute'
+import AboutUs from './component/AboutUs'
 function App() {
   return (
     <div style={{background: grey[600]}}>
@@ -21,7 +22,7 @@ function App() {
       <PrivateRoute path="/searchResult" component={FindAdvisorList}/>
       <PrivateRoute path="/advisorDetail/:id" component={AdvisorDetail}/>
       <Route exact path="/" component={Home} />
-    
+      <Route path="/aboutus" component={AboutUs}/>
     </Router>
     </div>
   );
